@@ -7,7 +7,7 @@
 
 import Foundation
 
-class IntegerValueFormatter: NumberFormatter {
+final class IntegerValueFormatter: NumberFormatter {
     override func isPartialStringValid(_ partialString: String, newEditingString newString: AutoreleasingUnsafeMutablePointer<NSString?>?, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Bool {
         guard !partialString.isEmpty else { return true }
         let scanner = Scanner(string: partialString)
