@@ -21,76 +21,64 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let menu = NSMenu().then {
         $0.title = ""
     }
-    
-    
+
     private var myContributes: [ContributeData] = []
     private var friendContributes: [ContributeData] = []
     private var mystreaks: ContributeData = ContributeData(count: 0, weekend: "", date: "")
 
     private let userMenuItem = NSMenuItem().then {
         $0.title = Localized.hello
-        $0.tag = 0
     }
 
-    private let refreshMenuItem = NSMenuItem().then {
-        $0.title = Localized.refresh
-        $0.action = #selector(onRefreshClick)
-        $0.keyEquivalent = "r"
-        $0.tag = 2
-    }
-
-    private let changeUserMenuItem = NSMenuItem().then {
-        $0.title = Localized.changeUsername
-        $0.action = #selector(onChangeUsernameClick)
-        $0.keyEquivalent = "u"
-        $0.tag = 3
-    }
-    
     private let helpMenuItem = NSMenuItem().then {
         $0.title = Localized.help
         $0.action = #selector(onHelpClick)
         $0.keyEquivalent = ""
-        $0.tag = 4
     }
-    
-    private let quitMenuItem = NSMenuItem().then {
-        $0.title = Localized.quit
-        $0.action = #selector(onQuitClick)
-        $0.tag = 5
-        $0.keyEquivalent = "q"
-    }
-    
+
     private let friendMenuItem = NSMenuItem().then {
         $0.title = Localized.changeFriendUsername
         $0.action = #selector(onChangeFriendUsernameClick)
-        $0.tag = 6
         $0.keyEquivalent = "f"
     }
-    
+
     private let RemoveFriendMenuItem = NSMenuItem().then {
         $0.title = Localized.removeFriendUsername
         $0.action = #selector(onRemoveFriendUsernameClick)
-        $0.tag = 6
         $0.keyEquivalent = "d"
-    }
-    
-    private let settingMenuItem = NSMenuItem().then {
-        $0.title = Localized.setting
-        $0.action = #selector(onSettingClick)
-        $0.keyEquivalent = "s"
-        $0.tag = 7
     }
 
     private let goalMenuItem = NSMenuItem().then {
         $0.title = Localized.setGoal
         $0.action = #selector(onChangeGoalClick)
         $0.keyEquivalent = "g"
-        $0.tag = 8
     }
 
+    private let refreshMenuItem = NSMenuItem().then {
+        $0.title = Localized.refresh
+        $0.action = #selector(onRefreshClick)
+        $0.keyEquivalent = "r"
+    }
+
+    private let changeUserMenuItem = NSMenuItem().then {
+        $0.title = Localized.changeUsername
+        $0.action = #selector(onChangeUsernameClick)
+        $0.keyEquivalent = "u"
+    }
+
+    private let settingMenuItem = NSMenuItem().then {
+        $0.title = Localized.setting
+        $0.action = #selector(onSettingClick)
+        $0.keyEquivalent = "s"
+    }
+
+    private let quitMenuItem = NSMenuItem().then {
+        $0.title = Localized.quit
+        $0.action = #selector(onQuitClick)
+        $0.keyEquivalent = "q"
+    }
 
     func applicationDidFinishLaunching(_: Notification) {
-        
         setupUI()
         
         if username.isEmpty {
@@ -110,7 +98,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: Setup UI
 
     private func setupUI() {
-        
         menu.addItem(.separator())
         menu.addItem(userMenuItem)
         menu.addItem(.separator())
@@ -133,7 +120,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func updateUI() {
-        
         var withFriend = ""
         if !friendUsername.isEmpty {
             withFriend = Localized.withFriend.replacingOccurrences(of: "${username}", with: friendUsername)
@@ -217,30 +203,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-  private func showChangeGoalAlert() {
-      let alert = NSAlert()
-      let goalTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 20))
-      let formatter = IntegerValueFormatter()
-      goalTextField.formatter = formatter
-      goalTextField.placeholderString = String(self.goal)
+    private func showChangeGoalAlert() {
+        let alert = NSAlert()
+        let goalTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 20))
+        let formatter = IntegerValueFormatter()
+        goalTextField.formatter = formatter
+        goalTextField.placeholderString = String(self.goal)
 
-      alert.messageText = Localized.goal
-      alert.informativeText = Localized.goalInformation
-      alert.alertStyle = .informational
-      alert.accessoryView = goalTextField
-      alert.addButton(withTitle: Localized.ok)
+        alert.messageText = Localized.goal
+        alert.informativeText = Localized.goalInformation
+        alert.alertStyle = .informational
+        alert.accessoryView = goalTextField
+        alert.addButton(withTitle: Localized.ok)
 
-      if !(self.goal == 0) {
-          alert.addButton(withTitle: Localized.cancel)
-      }
+        if !(self.goal == 0) {
+            alert.addButton(withTitle: Localized.cancel)
+        }
 
-      alert.window.initialFirstResponder = alert.accessoryView
+        alert.window.initialFirstResponder = alert.accessoryView
 
-      if alert.runModal() == .alertFirstButtonReturn {
-          let goal = goalTextField.integerValue
-          changeGoal(with: goal)
-      }
-  }
+        if alert.runModal() == .alertFirstButtonReturn {
+            let goal = goalTextField.integerValue
+            changeGoal(with: goal)
+        }
+    }
 
     private func showError() {
         DispatchQueue.main.async {
@@ -312,8 +298,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         refresh()
     }
-    
-    
+
     private func refresh() {
         removeAllItems()
         invalidateRefreshTimer()
@@ -327,7 +312,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.goal = UserDefaults.standard.integer(forKey: Consts.goalDefaultKey)
 
         refresh()
-  }
+    }
 
 
     private func setupRefreshTimer() {
@@ -378,7 +363,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
         } else {
             for myContribute in self.myContributes {
-                
+
                 let menuItem = NSMenuItem().then {
                     $0.isEnabled = true
                     $0.tag = Consts.contributionTag
@@ -404,14 +389,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             group.enter()
             fetchContributionsByUserame(username: self.friendUsername, isFriend: true, group: group)
         }
+
         group.notify(queue: .main){
             self.updateContributions()
             if let lastContribute = self.myContributes.last, self.goal != 0 {
                 self.fetchGoal(self.goal, contribute: lastContribute)
             }
+
             self.fetchStreaks(self.mystreaks)
         }
-        
     }
     
     private func fetchStreaks(_ date: ContributeData) {
@@ -476,8 +462,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         .resume()
     }
-    
-    
+
     private func mapFunction(ele : Element) -> ContributeData {
         guard let attr = ele.getAttributes() else { return ContributeData(count: 0, weekend: "", date: "") }
         let date: String = attr.get(key: ParseKeys.date)
@@ -507,8 +492,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return []
         }
     }
-    
-    
+
     private func parseHtmltoDataForCount(html: String) -> ContributeData {
         do {
             let doc: Document = try SwiftSoup.parse(html)

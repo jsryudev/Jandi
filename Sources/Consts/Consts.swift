@@ -12,7 +12,7 @@ enum Consts {
     static let fetchStreak = 1000
     static let refreshInterval = 10
     static let contributionTag = 1
-    static let goalTag = 9
+    static let goalTag = 2
     static let usernameDefaultKey = "username"
     static let friendUsernameDefaultKey = "friend_username"
     static let goalDefaultKey = "goal"
