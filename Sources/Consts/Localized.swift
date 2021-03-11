@@ -23,7 +23,7 @@ enum Localized {
     static let changeUsernameDescription = NSLocalizedString("change_username_description", comment: "Change username")
     static let autoLaunch = NSLocalizedString("auto_launch", comment: "Automatically start Jandi at login")
     static let information = NSLocalizedString("information", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
-    static let friend_information = NSLocalizedString("friend_information", comment: "Enter your friend GitHub username. We'll fetch the number of contributions.")
+    static let friendInformation = NSLocalizedString("friend_information", comment: "Enter your friend GitHub username. We'll fetch the number of contributions.")
     static let goal =  NSLocalizedString("goal", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
     static let goalInformation =  NSLocalizedString("goal_information", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
     static let setting = NSLocalizedString("setting", comment: "Preferences")

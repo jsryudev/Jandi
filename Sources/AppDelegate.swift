@@ -199,7 +199,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         friendUsernameTextField.placeholderString = friendUsername.isEmpty ? Localized.textFieldPlaceholder : friendUsername
 
         alert.messageText = friendUsername.isEmpty ? Localized.setUsernameDescription : Localized.changeUsernameDescription
-        alert.informativeText = Localized.friend_information
+        alert.informativeText = Localized.friendInformation
         alert.alertStyle = .informational
         alert.accessoryView = friendUsernameTextField
         alert.addButton(withTitle: Localized.ok)
