@@ -20,7 +20,7 @@ extension Int {
             return "🔥"
         }
     }
-    
+
     func getStreaks() -> String {
         switch self {
         case 0:
@@ -28,9 +28,9 @@ extension Int {
         case 1:
             return Localized.streakSecondStage
         case 2 ..< 30:
-            return Localized.streakThirdStage.replacingOccurrences(of: "${day}", with: self.description)
+            return Localized.streakThirdStage.replacingOccurrences(of: "${day}", with: description)
         default:
-            return Localized.streakForthStage.replacingOccurrences(of: "${day}", with: self.description)
+            return Localized.streakForthStage.replacingOccurrences(of: "${day}", with: description)
         }
     }
 }

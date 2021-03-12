@@ -24,11 +24,11 @@ enum Localized {
     static let autoLaunch = NSLocalizedString("auto_launch", comment: "Automatically start Jandi at login")
     static let information = NSLocalizedString("information", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
     static let friendInformation = NSLocalizedString("friend_information", comment: "Enter your friend GitHub username. We'll fetch the number of contributions.")
-    static let goal =  NSLocalizedString("goal", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
-    static let goalInformation =  NSLocalizedString("goal_information", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
+    static let goal = NSLocalizedString("goal", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
+    static let goalInformation = NSLocalizedString("goal_information", comment: "Enter your GitHub username. We’ll fetch the number of contributions.")
     static let setting = NSLocalizedString("setting", comment: "Preferences")
     static let settingTitle = NSLocalizedString("setting_title", comment: "Preferences Title")
-    
+
     static let streakFristStage = NSLocalizedString("streak_first_stage", comment: "streak stage 1")
     static let streakSecondStage = NSLocalizedString("streak_second_stage", comment: "streak stage 2")
     static let streakThirdStage = NSLocalizedString("streak_third_stage", comment: "streak stage 3")
@@ -36,7 +36,7 @@ enum Localized {
     static let streakFifthStage = NSLocalizedString("streak_fifth_stage", comment: "streak stage 5")
     static let goalToGo = NSLocalizedString("goal_to_go", comment: "commits to go")
     static let goalAccomplished = NSLocalizedString("goal_accomplished", comment: "Goal accomplished")
-    
+
     static let ok = NSLocalizedString("ok", comment: "Okay")
     static let cancel = NSLocalizedString("cancel", comment: "cancel")
     static let error = NSLocalizedString("error", comment: "error")

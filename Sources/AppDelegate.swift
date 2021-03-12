@@ -12,7 +12,6 @@ import LaunchAtLogin
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    
     private var statusItem: NSStatusItem?
     private var refreshTimer: Timer?
     private var username = UserDefaults.standard.string(forKey: Consts.usernameDefaultKey) ?? ""
@@ -80,12 +79,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_: Notification) {
         setupUI()
-        
+
         if username.isEmpty {
             showChangeUsernameAlert()
             return
         }
-        
+
         fetchContributions()
         setupRefreshTimer()
     }
@@ -112,10 +111,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(changeUserMenuItem)
         menu.addItem(settingMenuItem)
         menu.addItem(quitMenuItem)
-        
+
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem?.menu = menu
-        
+
         updateUI()
     }
 
@@ -124,24 +123,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !friendUsername.isEmpty {
             withFriend = Localized.withFriend.replacingOccurrences(of: "${username}", with: friendUsername)
         }
-        
+
         let userMenuItemTitle = Localized.hello.replacingOccurrences(of: "${username}", with: username).replacingOccurrences(of: "${withFriend}", with: withFriend)
         userMenuItem.attributedTitle = NSAttributedString(string: userMenuItemTitle)
-        
-        let friendMenuItemTitle = self.friendUsername.isEmpty ? Localized.setFriendUsername : Localized.changeFriendUsername
+
+        let friendMenuItemTitle = friendUsername.isEmpty ? Localized.setFriendUsername : Localized.changeFriendUsername
         friendMenuItem.title = friendMenuItemTitle
-        
-        RemoveFriendMenuItem.isHidden = self.friendUsername.isEmpty
+
+        RemoveFriendMenuItem.isHidden = friendUsername.isEmpty
     }
-    
+
     private func showSettingAlert() {
         let alert = NSAlert()
-        
+
         alert.messageText = Localized.settingTitle
         let button = NSButton(checkboxWithTitle: Localized.autoLaunch, target: nil, action: #selector(setupLauchToggle))
         button.state = LaunchAtLogin.isEnabled ? .on : .off
         alert.accessoryView = button
-        
+
         if alert.runModal() == .alertFirstButtonReturn {
             return
         }
@@ -177,7 +176,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             changeUsername(withUsername: username)
         }
     }
-    
+
     private func showChangeFriendUsernameAlert() {
         let alert = NSAlert()
         let friendUsernameTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 20))
@@ -196,8 +195,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let friendUsername = friendUsernameTextField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             if friendUsername.isEmpty {
                 removeFriendinfo()
-            }
-            else {
+            } else {
                 changeFriendUsername(withUsername: friendUsername)
             }
         }
@@ -208,7 +206,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let goalTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 20))
         let formatter = IntegerValueFormatter()
         goalTextField.formatter = formatter
-        goalTextField.placeholderString = String(self.goal)
+        goalTextField.placeholderString = String(goal)
 
         alert.messageText = Localized.goal
         alert.informativeText = Localized.goalInformation
@@ -216,7 +214,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.accessoryView = goalTextField
         alert.addButton(withTitle: Localized.ok)
 
-        if !(self.goal == 0) {
+        if !(goal == 0) {
             alert.addButton(withTitle: Localized.cancel)
         }
 
@@ -251,29 +249,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func onChangeUsernameClick() {
         showChangeUsernameAlert()
     }
-    
-    @objc func onChangeFriendUsernameClick(){
+
+    @objc func onChangeFriendUsernameClick() {
         showChangeFriendUsernameAlert()
     }
-    
-    @objc func onRemoveFriendUsernameClick(){
+
+    @objc func onRemoveFriendUsernameClick() {
         removeFriendinfo()
     }
-    
+
     @objc func onHelpClick() {
         let url = URL(string: "https://github.com/techinpark/Jandi")!
         NSWorkspace.shared.open(url)
     }
-    
+
     @objc func onSettingClick() {
         showSettingAlert()
     }
-    
+
     @objc func setupLauchToggle() {
         LaunchAtLogin.isEnabled.toggle()
     }
 
-    @objc func onChangeGoalClick(){
+    @objc func onChangeGoalClick() {
         showChangeGoalAlert()
     }
 
@@ -283,19 +281,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         refresh()
     }
-    
+
     private func changeFriendUsername(withUsername username: String) {
         UserDefaults.standard.setValue(username, forKey: Consts.friendUsernameDefaultKey)
-        self.friendUsername = UserDefaults.standard.string(forKey: Consts.friendUsernameDefaultKey)!
-        
+        friendUsername = UserDefaults.standard.string(forKey: Consts.friendUsernameDefaultKey)!
+
         refresh()
     }
-    
-    private func removeFriendinfo(){
+
+    private func removeFriendinfo() {
         UserDefaults.standard.setValue("", forKey: Consts.friendUsernameDefaultKey)
-        self.friendUsername = ""
-        self.friendContributes = []
-        
+        friendUsername = ""
+        friendContributes = []
+
         refresh()
     }
 
@@ -313,7 +311,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         refresh()
     }
-
 
     private func setupRefreshTimer() {
         refreshTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(Consts.refreshInterval * 60),
@@ -339,58 +336,57 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: Contribution functions
 
-    private func updateContributions(){
-        if self.myContributes.count == self.friendContributes.count {
-            let contributes = zip(self.myContributes, self.friendContributes)
-            for (myContribute, friendContribute) in contributes{
+    private func updateContributions() {
+        if myContributes.count == friendContributes.count {
+            let contributes = zip(myContributes, friendContributes)
+            for (myContribute, friendContribute) in contributes {
                 myContribute.merge(contributeData: friendContribute)
-                
+
                 let menuItem = NSMenuItem().then {
                     $0.isEnabled = true
                     $0.tag = Consts.contributionTag
                     $0.attributedTitle = myContribute.getStatusDetailAttributedString()
                 }
 
-                self.menu.insertItem(menuItem, at: .zero)
+                menu.insertItem(menuItem, at: .zero)
             }
-            
-            guard let myLastContribute = self.myContributes.last else { return }
-            guard let friendLastContribute = self.friendContributes.last else { return }
+
+            guard let myLastContribute = myContributes.last else { return }
+            guard let friendLastContribute = friendContributes.last else { return }
             myLastContribute.merge(contributeData: friendLastContribute)
             DispatchQueue.main.async {
                 self.statusItem?.button?.attributedTitle = myLastContribute.getStatusBarAttributedString()
             }
-            
-        } else {
-            for myContribute in self.myContributes {
 
+        } else {
+            for myContribute in myContributes {
                 let menuItem = NSMenuItem().then {
                     $0.isEnabled = true
                     $0.tag = Consts.contributionTag
                     $0.attributedTitle = myContribute.getStatusDetailAttributedString()
                 }
 
-                self.menu.insertItem(menuItem, at: .zero)
+                menu.insertItem(menuItem, at: .zero)
             }
-            
-            guard let lastContribute = self.myContributes.last else { return }
+
+            guard let lastContribute = myContributes.last else { return }
             DispatchQueue.main.async {
                 self.statusItem?.button?.attributedTitle = lastContribute.getStatusBarAttributedString()
             }
         }
     }
-    
+
     private func fetchContributions() {
         let group = DispatchGroup()
         group.enter()
-        fetchContributionsByUserame(username: self.username, group: group)
-        
-        if !self.friendUsername.isEmpty {
+        fetchContributionsByUserame(username: username, group: group)
+
+        if !friendUsername.isEmpty {
             group.enter()
-            fetchContributionsByUserame(username: self.friendUsername, isFriend: true, group: group)
+            fetchContributionsByUserame(username: friendUsername, isFriend: true, group: group)
         }
 
-        group.notify(queue: .main){
+        group.notify(queue: .main) {
             self.updateContributions()
             if let lastContribute = self.myContributes.last, self.goal != 0 {
                 self.fetchGoal(self.goal, contribute: lastContribute)
@@ -399,7 +395,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.fetchStreaks(self.myStreaks)
         }
     }
-    
+
     private func fetchStreaks(_ date: ContributeData) {
         let menuItem = NSMenuItem().then {
             $0.isEnabled = true
@@ -407,8 +403,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             $0.attributedTitle = date.getStreaks()
         }
 
-        self.menu.insertItem(.separator(), at: .zero)
-        self.menu.insertItem(menuItem, at: .zero)
+        menu.insertItem(.separator(), at: .zero)
+        menu.insertItem(menuItem, at: .zero)
     }
 
     private func fetchGoal(_ goal: Int, contribute: ContributeData) {
@@ -418,11 +414,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             $0.attributedTitle = contribute.getGoalAttributedString(goal: goal)
         }
 
-        self.menu.insertItem(.separator(), at: .zero)
-        self.menu.insertItem(menuItem, at: .zero)
+        menu.insertItem(.separator(), at: .zero)
+        menu.insertItem(menuItem, at: .zero)
     }
-    
-    private func fetchContributionsByUserame(username: String, isFriend: Bool = false, group: DispatchGroup? = nil ) {
+
+    private func fetchContributionsByUserame(username: String, isFriend: Bool = false, group: DispatchGroup? = nil) {
         guard let targetURL = URL(string: "https://github.com/users/\(username)/contributions") else { return }
         URLSession.shared.dataTask(with: targetURL) { [weak self] data, response, error in
             guard let self = self else { return }
@@ -432,7 +428,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 return
             }
 
-            guard let httpResponse = response as? HTTPURLResponse, (200 ... 299).contains(httpResponse.statusCode) else {
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200 ... 299).contains(httpResponse.statusCode)
+            else {
                 self.showError()
                 return
             }
@@ -446,24 +444,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 return
             }
 
-            
             let contributeDataList = self.parseHtmltoData(html: html)
             if isFriend {
                 self.friendContributes = contributeDataList
-            } else{
+            } else {
                 self.myContributes = contributeDataList
                 self.myStreaks = self.parseHtmltoDataForCount(html: html)
             }
-            
+
             if group != nil {
                 group?.leave()
             }
-            
         }
         .resume()
     }
 
-    private func mapFunction(ele : Element) -> ContributeData {
+    private func mapFunction(ele: Element) -> ContributeData {
         guard let attr = ele.getAttributes() else { return ContributeData(count: 0, weekend: "", date: "") }
         let date: String = attr.get(key: ParseKeys.date)
 
@@ -473,12 +469,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         dateFormatter.timeZone = TimeZone.current
 
         let dateForWeekend = dateFormatter.date(from: date)
-        guard let weekend = dateForWeekend?.dayOfWeek() else { return ContributeData(count: 0, weekend: "", date: "")}
-        guard let count = Int(attr.get(key: ParseKeys.contributionCount)) else { return ContributeData(count: 0, weekend: "", date: "")}
-        
+        guard let weekend = dateForWeekend?.dayOfWeek() else { return ContributeData(count: 0, weekend: "", date: "") }
+        guard let count = Int(attr.get(key: ParseKeys.contributionCount)) else { return ContributeData(count: 0, weekend: "", date: "") }
+
         return ContributeData(count: count, weekend: weekend, date: date)
     }
-    
+
     private func parseHtmltoData(html: String) -> [ContributeData] {
         do {
             let doc: Document = try SwiftSoup.parse(html)
@@ -487,7 +483,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let weekend = days.suffix(Consts.fetchCount)
             let contributeDataList = weekend.map(mapFunction)
             return contributeDataList
-            
+
         } catch {
             return []
         }
@@ -500,7 +496,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let days: [Element] = rects.array().filter { $0.hasAttr(ParseKeys.date) }
             let count = days.suffix(Consts.fetchStreak)
             var contributeLastDate = count.map(mapFunction)
-            contributeLastDate.sort{ $0.date > $1.date }
+            contributeLastDate.sort { $0.date > $1.date }
             for index in 0 ..< contributeLastDate.count {
                 if contributeLastDate[index].count == .zero {
                     return contributeLastDate[index]
@@ -518,5 +514,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return ContributeData(count: 0, weekend: "", date: "")
         }
     }
-
 }
