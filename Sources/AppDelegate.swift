@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var myContributes: [ContributeData] = []
     private var friendContributes: [ContributeData] = []
-    private var mystreaks: ContributeData = ContributeData(count: 0, weekend: "", date: "")
+    private var myStreaks: ContributeData = ContributeData(count: 0, weekend: "", date: "")
 
     private let userMenuItem = NSMenuItem().then {
         $0.title = Localized.hello
@@ -396,7 +396,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.fetchGoal(self.goal, contribute: lastContribute)
             }
 
-            self.fetchStreaks(self.mystreaks)
+            self.fetchStreaks(self.myStreaks)
         }
     }
     
@@ -452,7 +452,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.friendContributes = contributeDataList
             } else{
                 self.myContributes = contributeDataList
-                self.mystreaks = self.parseHtmltoDataForCount(html: html)
+                self.myStreaks = self.parseHtmltoDataForCount(html: html)
             }
             
             if group != nil {
